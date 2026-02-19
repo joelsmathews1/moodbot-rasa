@@ -1,0 +1,83 @@
+version: "3.1"
+
+# ==============================================================
+# MoodBot – rules.yml
+# Rules fire deterministically (no ML uncertainty).
+# Used for: crisis, fallback, greetings, tool requests.
+# ==============================================================
+
+rules:
+
+  # ── Safety: ALWAYS handle crisis signal immediately ──────────
+  - rule: Crisis signal → immediate crisis response
+    steps:
+      - intent: crisis_signal
+      - action: action_handle_crisis
+    # This rule fires regardless of conversation context (no condition)
+
+  # ── Greetings ────────────────────────────────────────────────
+  - rule: Greet user on conversation start
+    conversation_start: true
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  - rule: Greet returning user
+    conversation_start: false
+    steps:
+      - intent: greet
+      - action: utter_greet_returning
+
+  - rule: Handle goodbye
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye
+
+  # ── Bot identity & help ─────────────────────────────────────
+  - rule: Answer identity question
+    steps:
+      - intent: ask_bot_identity
+      - action: utter_bot_identity
+
+  - rule: Show help menu
+    steps:
+      - intent: ask_for_help_menu
+      - action: utter_help_menu
+
+  - rule: Thank-you response
+    steps:
+      - intent: thank_bot
+      - action: utter_thank_you_response
+
+  # ── Coping tool requests (user explicitly asks) ──────────────
+  - rule: User asks for breathing exercise
+    steps:
+      - intent: request_breathing_exercise
+      - action: action_offer_contextual_coping
+
+  - rule: User asks for journaling prompt
+    steps:
+      - intent: request_journaling_prompt
+      - action: action_provide_journaling_prompt
+
+  - rule: User asks for reframing
+    steps:
+      - intent: request_reframing
+      - action: utter_reframing
+
+  - rule: User asks for general coping tip
+    steps:
+      - intent: request_coping_tip
+      - action: utter_offer_coping_menu
+
+  # ── Fallback ─────────────────────────────────────────────────
+  - rule: NLU fallback handler
+    steps:
+      - intent: nlu_fallback
+      - action: utter_default_fallback
+
+  - rule: Two-stage fallback — still confused after clarification
+    steps:
+      - action: utter_default_fallback
+      - intent: nlu_fallback
+      - action: utter_default_fallback

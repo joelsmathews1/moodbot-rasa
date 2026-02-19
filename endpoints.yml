@@ -1,0 +1,35 @@
+# ==============================================================
+# MoodBot – endpoints.yml
+# Service endpoints for action server, tracker store, etc.
+# ==============================================================
+
+# ── Action server ─────────────────────────────────────────────
+action_endpoint:
+  url: "http://localhost:5055/webhook"
+  # In Docker: url: "http://action_server:5055/webhook"
+
+# ── Tracker store (default: in-memory; use Redis for prod) ────
+# tracker_store:
+#   type: redis
+#   url: redis
+#   port: 6379
+#   db: 0
+#   password: "${REDIS_PASSWORD}"
+#   use_ssl: false
+
+# ── Lock store (required for multi-worker Rasa) ───────────────
+# lock_store:
+#   type: redis
+#   url: redis
+#   port: 6379
+#   db: 1
+#   password: "${REDIS_PASSWORD}"
+
+# ── Event broker (for analytics / audit trail) ────────────────
+# event_broker:
+#   type: pika                   # RabbitMQ
+#   url: "${RABBITMQ_HOST}"
+#   username: "${RABBITMQ_USER}"
+#   password: "${RABBITMQ_PASS}"
+#   queues:
+#     - moodbot_events

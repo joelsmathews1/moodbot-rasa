@@ -1,0 +1,67 @@
+version: "3.8"
+
+# ==============================================================
+# MoodBot – docker-compose.yml
+# Services: Rasa server | Action server | Redis
+# ==============================================================
+
+services:
+
+  # ── Rasa Core + NLU server ───────────────────────────────────
+  rasa:
+    image: rasa/rasa:3.6.20-full
+    container_name: moodbot_rasa
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./:/app
+      - rasa_models:/app/models
+    environment:
+      - SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}
+      - SLACK_CHANNEL=${SLACK_CHANNEL}
+      - SLACK_SIGNING_SECRET=${SLACK_SIGNING_SECRET}
+    command: >
+      run
+      --enable-api
+      --cors "*"
+      --debug
+    depends_on:
+      - action_server
+      - redis
+    networks:
+      - moodbot_net
+    restart: unless-stopped
+
+  # ── Custom action server ──────────────────────────────────────
+  action_server:
+    build:
+      context: .
+      dockerfile: Dockerfile.actions
+    container_name: moodbot_actions
+    ports:
+      - "5055:5055"
+    volumes:
+      - ./actions:/app/actions
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: rasa run actions --port 5055 --debug
+    networks:
+      - moodbot_net
+    restart: unless-stopped
+
+  # ── Redis (tracker + lock store) ─────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: moodbot_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - moodbot_net
+    restart: unless-stopped
+
+volumes:
+  rasa_models:
+
+networks:
+  moodbot_net:
+    driver: bridge

@@ -1,0 +1,75 @@
+# ==============================================================
+# MoodBot – config.yml
+# Rasa NLU pipeline + dialogue policies
+# ==============================================================
+
+recipe: default.v1
+
+language: en
+
+# ── NLU Pipeline ───────────────────────────────────────────────
+pipeline:
+
+  # 1. Tokenizer — split text into tokens
+  - name: WhitespaceTokenizer
+
+  # 2. Featurizers — extract signal from text
+  - name: RegexFeaturizer          # uses regex patterns from nlu.yml
+  - name: LexicalSyntacticFeaturizer
+  - name: CountVectorsFeaturizer
+  - name: CountVectorsFeaturizer
+    analyzer: char_wb
+    min_ngram: 1
+    max_ngram: 4
+
+  # 3. Entity extractor
+  # NOTE: LanguageModelFeaturizer (LaBSE/BERT) is listed as an optional
+  # upgrade below. It needs `pip install transformers torch` first.
+  # Uncomment once installed — it significantly boosts accuracy on
+  # short emotional text like "I feel hopeless" vs "I'm just tired".
+  #
+  # - name: LanguageModelFeaturizer
+  #   model_name: bert
+  #   model_weights: rasa/LaBSE
+  #   cache_dir: null
+  - name: DIETClassifier
+    epochs: 200
+    constrain_similarities: true
+    entity_recognition: true
+    # Drop this to 100 epochs if training is slow; 200 recommended for prod
+
+  # 5. Fallback — low confidence → nlu_fallback intent
+  - name: FallbackClassifier
+    threshold: 0.65              # tune: lower = more permissive
+    ambiguity_threshold: 0.10   # fire if top-2 intents are close
+
+  # 6. Entity synonyms
+  - name: EntitySynonymMapper
+
+  # 7. Response selector (for chitchat if added later)
+  - name: ResponseSelector
+    epochs: 100
+
+# ── Dialogue Policies ──────────────────────────────────────────
+policies:
+
+  # Safety: rules always win over ML
+  - name: RulePolicy
+    core_fallback_threshold: 0.40
+    core_fallback_action_name: "action_default_fallback"
+    enable_fallback_prediction: true
+
+  # ML story-based policy (TEDPolicy)
+  - name: TEDPolicy
+    max_history: 8               # how many turns to look back
+    epochs: 200
+    constrain_similarities: true
+
+  # Memoization — exact story matches (zero ML uncertainty)
+  - name: MemoizationPolicy
+    max_history: 8
+
+  # Unexpected intent — detects off-script user turns
+  - name: UnexpecTEDIntentPolicy
+    max_history: 8
+    epochs: 100

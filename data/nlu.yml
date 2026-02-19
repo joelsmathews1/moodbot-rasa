@@ -1,0 +1,470 @@
+version: "3.1"
+
+# ==============================================================
+# MoodBot – nlu.yml
+# Best practices applied:
+#   • 15–25 examples per intent for baseline quality
+#   • Entity annotation inline
+#   • Intentional spelling variation for robustness
+#   • Avoid overlap between similar intents
+# ==============================================================
+
+nlu:
+
+# ── Greetings ──────────────────────────────────────────────────
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi there
+    - good morning
+    - what's up
+    - hey moodbot
+    - hi!
+    - hello there
+    - hey bot
+    - good afternoon
+    - morning
+    - howdy
+    - sup
+    - yo
+    - hey, I need to talk
+
+- intent: goodbye
+  examples: |
+    - bye
+    - goodbye
+    - see you later
+    - take care
+    - I'm done for now
+    - thanks, bye
+    - gotta go
+    - that's all for now
+    - catch you later
+    - ok bye
+    - I need to go now
+    - signing off
+    - I'll come back later
+    - alright, thanks
+
+- intent: affirm
+  examples: |
+    - yes
+    - yeah
+    - yep
+    - sure
+    - absolutely
+    - of course
+    - that sounds good
+    - yes please
+    - definitely
+    - ok
+    - okay
+    - that would help
+    - go ahead
+    - please
+
+- intent: deny
+  examples: |
+    - no
+    - nope
+    - no thanks
+    - not right now
+    - I'm good
+    - no need
+    - maybe later
+    - that's okay
+    - not really
+    - nah
+    - I'll pass
+
+# ── Mood: Sadness ──────────────────────────────────────────────
+- intent: inform_mood_sad
+  examples: |
+    - I feel [sad](emotion)
+    - I've been [sad](emotion) all day
+    - I'm feeling really [down](emotion)
+    - I just feel [depressed](emotion)
+    - everything feels [hopeless](emotion)
+    - I can't stop crying
+    - I feel like crying for no reason
+    - I've been [low](emotion) lately
+    - I'm really [unhappy](emotion) right now
+    - I feel [empty](emotion) inside
+    - life feels [pointless](emotion)
+    - I feel [lonely](emotion) and [sad](emotion)
+    - nothing makes me happy anymore
+    - I feel like a failure
+    - I've been [grieving](emotion) and it's hard
+    - I miss someone who's gone
+    - I feel disconnected from everyone
+    - things feel [bleak](emotion)
+    - I'm [heartbroken](emotion)
+    - I lost something important and I'm [devastated](emotion)
+    - I feel [sad](emotion) for no particular reason
+    - I woke up feeling [down](emotion) and I don't know why
+    - I'm [miserable](emotion) today
+
+# ── Mood: Stressed ────────────────────────────────────────────
+- intent: inform_mood_stressed
+  examples: |
+    - I'm so [stressed](emotion)
+    - I feel [stressed out](emotion)
+    - I'm really [stressed](emotion) about [work](topic)
+    - everything at [work](topic) is piling up
+    - I have so much to do and I can't handle it
+    - I'm under a lot of [pressure](emotion) right now
+    - I'm [burned out](emotion)
+    - I feel totally [burnt out](emotion)
+    - the [workload](topic) is insane
+    - I haven't slept properly because of [stress](emotion)
+    - I'm overwhelmed by [deadlines](topic)
+    - I can't keep up with everything
+    - my [boss](topic) is putting so much pressure on me
+    - I feel [tense](emotion) all the time
+    - my [job](topic) is killing me mentally
+    - I'm [stressed](emotion) about [finances](topic)
+    - [financial](topic) pressure is eating me alive
+    - there's too much on my plate
+    - I can't catch a break
+    - I feel like I'm drowning in responsibilities
+    - I've been running on empty for weeks
+    - I'm about to hit a wall
+    - my body is so [tense](emotion) from [stress](emotion)
+
+# ── Mood: Anxious ─────────────────────────────────────────────
+- intent: inform_mood_anxious
+  examples: |
+    - I feel [anxious](emotion)
+    - I'm feeling really [anxious](emotion)
+    - I have so much [anxiety](emotion) right now
+    - I'm [worried](emotion) about everything
+    - my mind won't stop racing
+    - I keep catastrophizing
+    - I can't stop [worrying](emotion)
+    - I feel [nervous](emotion) all the time
+    - I'm [scared](emotion) something bad is going to happen
+    - I have [panic attacks](emotion)
+    - I had a [panic attack](emotion) today
+    - I feel [on edge](emotion)
+    - I can't relax no matter what
+    - I feel [dread](emotion) for no clear reason
+    - my heart is racing and I feel [anxious](emotion)
+    - I'm [anxious](emotion) about [my future](topic)
+    - I'm [worried](emotion) about [my health](topic)
+    - I feel like something bad is coming and I can't explain it
+    - [social anxiety](emotion) is really getting to me
+    - I'm [anxious](emotion) around people lately
+    - I feel [unsettled](emotion) and I don't know why
+    - constant [worry](emotion) is exhausting me
+    - I keep imagining worst case scenarios
+
+# ── Mood: Overwhelmed ─────────────────────────────────────────
+- intent: inform_mood_overwhelmed
+  examples: |
+    - I feel [overwhelmed](emotion)
+    - I'm totally [overwhelmed](emotion)
+    - everything is too much right now
+    - I don't know where to start
+    - there's too much happening at once
+    - I feel [buried](emotion) under everything
+    - I can't handle all of this
+    - everything is [piling up](emotion)
+    - my to-do list is paralyzing me
+    - I feel [crushed](emotion) by responsibilities
+    - I have too many things to deal with
+    - I feel like I'm spinning my wheels
+    - I'm [overwhelmed](emotion) at [work](topic)
+    - life feels like too much to manage
+    - I can't cope with everything on my plate
+    - all of this is [too much](emotion)
+    - I feel [swamped](emotion)
+    - I'm drowning in tasks
+    - I feel [crushed](emotion) and I don't know what to do first
+    - every direction I look there's more to deal with
+
+# ── Mood: Angry ───────────────────────────────────────────────
+- intent: inform_mood_angry
+  examples: |
+    - I'm so [angry](emotion)
+    - I feel [angry](emotion)
+    - I'm really [frustrated](emotion)
+    - I'm [furious](emotion) right now
+    - I can't believe what just happened
+    - I'm [pissed off](emotion)
+    - I'm [livid](emotion)
+    - I feel [rage](emotion)
+    - someone really crossed a line and I'm [angry](emotion)
+    - I feel [resentful](emotion)
+    - I'm [irritated](emotion) all the time lately
+    - I'm [fed up](emotion) with this situation
+    - I feel [betrayed](emotion) and [angry](emotion)
+    - I'm [angry](emotion) at [my boss](topic)
+    - I'm [angry](emotion) at [my partner](topic)
+    - people keep taking advantage of me and I'm [furious](emotion)
+    - I'm [bitter](emotion) about how things turned out
+    - I feel [enraged](emotion) and I can't calm down
+    - I hate feeling this [angry](emotion) but I can't help it
+    - I snapped at someone today because I'm so [frustrated](emotion)
+
+# ── Mood: Happy ───────────────────────────────────────────────
+- intent: inform_mood_happy
+  examples: |
+    - I feel [happy](emotion) today
+    - I'm in a great mood
+    - things are going really well
+    - I feel [great](emotion)
+    - I'm feeling [positive](emotion) today
+    - I had a really good day
+    - I feel [joyful](emotion)
+    - I'm [excited](emotion) about something
+    - I feel [content](emotion)
+    - today was actually a good day
+    - I feel [light](emotion) and [happy](emotion)
+    - I'm feeling [good](emotion) for once
+    - things are [looking up](emotion)
+    - I feel [grateful](emotion)
+    - I accomplished something today and I feel [proud](emotion)
+    - I feel [hopeful](emotion) today
+    - I had a breakthrough and I'm [happy](emotion)
+    - life feels [manageable](emotion) right now
+
+# ── Mood: Neutral ─────────────────────────────────────────────
+- intent: inform_mood_neutral
+  examples: |
+    - I'm okay
+    - I'm fine
+    - not great, not terrible
+    - just existing
+    - I feel [neutral](emotion)
+    - I'm doing alright
+    - nothing special going on
+    - I'm just kind of [meh](emotion)
+    - I don't really feel much
+    - I'm [numb](emotion) honestly
+    - I'm [flat](emotion) today
+    - I'm not good or bad, just here
+    - average day
+    - could be better, could be worse
+    - I'm managing
+
+# ── Venting ───────────────────────────────────────────────────
+- intent: vent
+  examples: |
+    - I just need to vent
+    - can I just vent for a minute?
+    - I need to get something off my chest
+    - I just need to talk
+    - I need someone to listen
+    - I don't need advice, I just need to be heard
+    - I have a lot going on and I need to talk through it
+    - can I share something with you?
+    - I've been holding this in and I need to let it out
+    - I just need to express what I'm going through
+    - let me tell you what's been happening
+    - I want to vent without judgment
+    - I've been bottling things up
+    - I need to process something
+    - something happened and I need to talk about it
+
+# ── Coping requests ───────────────────────────────────────────
+- intent: request_coping_tip
+  examples: |
+    - what can I do to feel better?
+    - any tips for feeling better?
+    - can you help me cope?
+    - what should I do right now?
+    - give me something to help
+    - I need a coping strategy
+    - how do I deal with this?
+    - what helps when you feel this way?
+    - give me a tool to use
+    - help me manage this
+    - I need something to calm down
+    - what are my options?
+
+- intent: request_breathing_exercise
+  examples: |
+    - can you give me a breathing exercise?
+    - help me breathe
+    - I need a breathing technique
+    - teach me how to breathe properly
+    - breathing exercise please
+    - how do I calm my breathing?
+    - let's do breathwork
+    - I want a breathing technique
+    - guide me through some breaths
+    - give me something to breathe through this
+
+- intent: request_journaling_prompt
+  examples: |
+    - give me a journaling prompt
+    - I want to journal
+    - help me write through this
+    - journaling prompt please
+    - what should I journal about?
+    - I want to write about my feelings
+    - can you give me something to reflect on?
+    - give me a reflection question
+    - I want to do some journaling
+    - help me put my feelings into words
+
+- intent: request_reframing
+  examples: |
+    - help me reframe this
+    - can you help me see this differently?
+    - I'm stuck in a negative thought loop
+    - I need to challenge my thinking
+    - help me think about this differently
+    - cognitive reframing please
+    - I keep having the same negative thought
+    - help me get out of this mindset
+    - give me a different perspective
+    - I need to think more rationally about this
+    - reframing exercise please
+
+# ── Crisis signals (CRITICAL — do not reduce coverage) ────────
+- intent: crisis_signal
+  examples: |
+    - I want to hurt myself
+    - I've been thinking about ending it
+    - I don't want to be here anymore
+    - I want to disappear
+    - I've been having thoughts of suicide
+    - I'm thinking about killing myself
+    - I don't want to live anymore
+    - I can't go on like this
+    - I've been self-harming
+    - I hurt myself
+    - I want to die
+    - I wish I wasn't alive
+    - life isn't worth living
+    - I'm done with everything
+    - I want to end my life
+    - I've been cutting myself
+    - I feel like giving up on life
+    - I'm not sure I want to keep going
+    - everyone would be better off without me
+    - I've been making a plan to end things
+
+# ── Bot identity ──────────────────────────────────────────────
+- intent: ask_bot_identity
+  examples: |
+    - what are you?
+    - who are you?
+    - are you a therapist?
+    - are you a real person?
+    - are you a bot?
+    - what is moodbot?
+    - are you AI?
+    - tell me about yourself
+    - what's your purpose?
+    - am I talking to a human?
+    - is this a real person?
+    - are you actually a human?
+    - are you a real therapist or a bot?
+
+- intent: ask_for_help_menu
+  examples: |
+    - help
+    - what can you do?
+    - show me my options
+    - help menu
+    - how do I use this?
+    - what are the options?
+    - I don't know what to say
+    - guide me
+    - I need help using this
+
+- intent: thank_bot
+  examples: |
+    - thank you
+    - thanks
+    - that helped
+    - this is really helpful
+    - I appreciate it
+    - thanks so much
+    - that made me feel better
+    - I feel a bit better
+    - that was exactly what I needed
+    - you're surprisingly helpful
+    - thanks for listening
+    - I feel heard
+
+# ── Synonyms ──────────────────────────────────────────────────
+- synonym: sad
+  examples: |
+    - down
+    - depressed
+    - low
+    - blue
+    - miserable
+    - heartbroken
+    - unhappy
+    - devastated
+
+- synonym: stressed
+  examples: |
+    - burned out
+    - burnt out
+    - tense
+    - pressure
+    - overloaded
+
+- synonym: anxious
+  examples: |
+    - worried
+    - nervous
+    - panicky
+    - on edge
+    - fearful
+    - scared
+
+- synonym: overwhelmed
+  examples: |
+    - buried
+    - swamped
+    - crushed
+    - drowning
+
+- synonym: angry
+  examples: |
+    - furious
+    - frustrated
+    - irritated
+    - livid
+    - enraged
+    - fed up
+    - pissed off
+
+# ── Lookup tables ────────────────────────────────────────────
+- lookup: topic
+  examples: |
+    - work
+    - job
+    - career
+    - boss
+    - coworker
+    - colleague
+    - relationship
+    - partner
+    - spouse
+    - family
+    - parent
+    - health
+    - illness
+    - finances
+    - money
+    - debt
+    - future
+    - school
+    - university
+    - studies
+
+# ── Regex ─────────────────────────────────────────────────────
+- regex: crisis_signal
+  examples: |
+    - (kill|end|hurt)\s*(my)?self
+    - (don't|do not)\s*want\s*to\s*(live|be here|exist)
+    - suicid(e|al)
+    - self.?harm

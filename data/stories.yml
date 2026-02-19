@@ -1,0 +1,169 @@
+version: "3.1"
+
+# ==============================================================
+# MoodBot – stories.yml
+# Stories teach the ML policy multi-turn conversation patterns.
+# They capture realistic branching emotional support flows.
+# ==============================================================
+
+stories:
+
+  # ── Venting → Empathy → Coping tool ────────────────────────
+  - story: User vents about sadness, accepts coping suggestion
+    steps:
+      - intent: inform_mood_sad
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: request_coping_tip
+      - action: utter_offer_coping_menu
+      - intent: request_journaling_prompt
+      - action: action_provide_journaling_prompt
+      - intent: thank_bot
+      - action: utter_thank_you_response
+
+  - story: User vents then asks for breathing
+    steps:
+      - intent: vent
+      - action: utter_confirm_heard
+      - intent: inform_mood_anxious
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: request_breathing_exercise
+      - action: action_offer_contextual_coping
+      - intent: affirm
+      - action: utter_ask_more
+
+  - story: User vents about stress then escalates to overwhelm
+    steps:
+      - intent: inform_mood_stressed
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: inform_mood_overwhelmed
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: request_coping_tip
+      - action: utter_reframing_overwhelmed
+      - intent: thank_bot
+      - action: utter_thank_you_response
+
+  # ── Anger flow ──────────────────────────────────────────────
+  - story: User expresses anger, asks for reframing
+    steps:
+      - intent: inform_mood_angry
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: request_reframing
+      - action: utter_reframing
+      - intent: thank_bot
+      - action: utter_thank_you_response
+
+  - story: User expresses anger then wants to journal
+    steps:
+      - intent: inform_mood_angry
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: request_journaling_prompt
+      - action: action_provide_journaling_prompt
+      - intent: affirm
+      - action: utter_ask_more
+
+  # ── Anxiety flow ────────────────────────────────────────────
+  - story: Anxious user does breathing, then asks more
+    steps:
+      - intent: inform_mood_anxious
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: request_breathing_exercise
+      - action: action_offer_contextual_coping
+      - intent: thank_bot
+      - action: utter_thank_you_response
+      - intent: greet
+      - action: utter_greet_returning
+
+  # ── Happy user flow ─────────────────────────────────────────
+  - story: Happy user checks in
+    steps:
+      - intent: inform_mood_happy
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: goodbye
+      - action: utter_goodbye
+
+  # ── Neutral/numb flow ───────────────────────────────────────
+  - story: Neutral user offered gentle check-in
+    steps:
+      - intent: inform_mood_neutral
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: vent
+      - action: utter_confirm_heard
+      - intent: inform_mood_sad
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+
+  # ── Direct tool request without sharing mood ────────────────
+  - story: User jumps straight to breathing without context
+    steps:
+      - intent: request_breathing_exercise
+      - action: action_offer_contextual_coping
+
+  - story: User jumps straight to journaling
+    steps:
+      - intent: request_journaling_prompt
+      - action: action_provide_journaling_prompt
+
+  # ── Bot identity mid-conversation ───────────────────────────
+  - story: User asks who the bot is in the middle of venting
+    steps:
+      - intent: inform_mood_stressed
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: ask_bot_identity
+      - action: utter_bot_identity
+      - intent: affirm
+      - action: utter_ask_more
+
+  # ── Mood escalation: stressed → crisis caught ───────────────
+  # NOTE: This story shows ML learns context, but the RULE
+  # above will always catch crisis_signal regardless.
+  - story: User discusses stress then signals crisis
+    steps:
+      - intent: inform_mood_stressed
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: crisis_signal
+      - action: action_handle_crisis
+
+  # ── Deny coping tip ─────────────────────────────────────────
+  - story: User declines coping suggestion
+    steps:
+      - intent: inform_mood_sad
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: request_coping_tip
+      - action: utter_offer_coping_menu
+      - intent: deny
+      - action: utter_confirm_heard
+
+  # ── Full long conversation ───────────────────────────────────
+  - story: Full emotional support session
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: inform_mood_overwhelmed
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - intent: vent
+      - action: utter_confirm_heard
+      - intent: request_coping_tip
+      - action: utter_offer_coping_menu
+      - intent: request_breathing_exercise
+      - action: action_offer_contextual_coping
+      - intent: affirm
+      - action: utter_ask_more
+      - intent: request_journaling_prompt
+      - action: action_provide_journaling_prompt
+      - intent: thank_bot
+      - action: utter_thank_you_response
+      - intent: goodbye
+      - action: utter_goodbye

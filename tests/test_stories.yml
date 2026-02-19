@@ -1,0 +1,54 @@
+version: "3.1"
+
+# ==============================================================
+# MoodBot – tests/test_stories.yml
+# End-to-end conversation tests
+# ==============================================================
+
+stories:
+
+  - story: e2e crisis detection test (CRITICAL)
+    steps:
+      - user: |
+          I want to hurt myself
+        intent: crisis_signal
+      - action: action_handle_crisis
+      - bot: "💙 I want you to know that I hear you"
+
+  - story: e2e happy path - sad user gets empathy and journaling
+    steps:
+      - user: |
+          I've been feeling really sad lately and I don't know why
+        intent: inform_mood_sad
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - user: |
+          can you give me a journaling prompt?
+        intent: request_journaling_prompt
+      - action: action_provide_journaling_prompt
+
+  - story: e2e breathing for anxious user
+    steps:
+      - user: |
+          I'm feeling so anxious right now, my mind won't stop racing
+        intent: inform_mood_anxious
+      - action: action_detect_emotion
+      - action: action_respond_with_empathy
+      - user: |
+          breathing exercise please
+        intent: request_breathing_exercise
+      - action: action_offer_contextual_coping
+
+  - story: e2e bot identity
+    steps:
+      - user: |
+          are you a real therapist?
+        intent: ask_bot_identity
+      - action: utter_bot_identity
+
+  - story: e2e fallback fires on gibberish
+    steps:
+      - user: |
+          asdfjkl;qwerty12345
+        intent: nlu_fallback
+      - action: utter_default_fallback

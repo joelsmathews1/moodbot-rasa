@@ -1,0 +1,256 @@
+version: "3.1"
+
+# ==============================================================
+# MoodBot – Emotional Support Slack Chatbot
+# domain.yml
+# ==============================================================
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - inform_mood_sad
+  - inform_mood_stressed
+  - inform_mood_anxious
+  - inform_mood_overwhelmed
+  - inform_mood_angry
+  - inform_mood_happy
+  - inform_mood_neutral
+  - vent
+  - request_coping_tip
+  - request_breathing_exercise
+  - request_journaling_prompt
+  - request_reframing
+  - crisis_signal          # self-harm / suicidal language → escalation
+  - ask_bot_identity
+  - ask_for_help_menu
+  - thank_bot
+  - nlu_fallback
+
+entities:
+  - emotion
+  - intensity          # mild | moderate | severe
+  - topic              # work | relationship | health | finances | general
+
+slots:
+  detected_emotion:
+    type: categorical
+    values:
+      - sad
+      - stressed
+      - anxious
+      - overwhelmed
+      - angry
+      - happy
+      - neutral
+      - unknown
+    mappings:
+      - type: custom          # set by action_detect_emotion
+  emotion_intensity:
+    type: categorical
+    values: [mild, moderate, severe]
+    mappings:
+      - type: custom
+  venting_topic:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: topic
+  session_started:
+    type: bool
+    mappings:
+      - type: custom
+
+responses:
+
+  # ── Greetings ────────────────────────────────────────────────
+  utter_greet:
+    - text: "Hey 👋 I'm MoodBot — a safe space to vent, breathe, or just feel heard. How are you doing right now?"
+
+  utter_greet_returning:
+    - text: "Welcome back 💙 What's on your mind today?"
+
+  utter_goodbye:
+    - text: "Take care of yourself. Remember: one breath at a time 🌿"
+    - text: "Wishing you a gentler rest of the day 💙"
+
+  # ── Empathetic acknowledgments (per emotion) ────────────────
+  utter_empathy_sad:
+    - text: "I hear you. Sadness can feel really heavy, and it makes complete sense that you're feeling this way. You don't have to carry it alone."
+    - text: "That sounds genuinely hard. It's okay to feel sad — those feelings are valid and real."
+
+  utter_empathy_stressed:
+    - text: "Stress has a way of making everything feel urgent and impossible at once. That sounds exhausting."
+    - text: "It sounds like you're carrying a lot right now. That pressure is real, and I see you."
+
+  utter_empathy_anxious:
+    - text: "Anxiety can make your mind race with worst-case scenarios. Let's slow things down a bit together."
+    - text: "I hear the worry in what you're sharing. You're not overreacting — anxiety is real and hard."
+
+  utter_empathy_overwhelmed:
+    - text: "When everything piles up, it can feel impossible to know where to start. That's a completely understandable response to too much at once."
+    - text: "Being overwhelmed isn't a weakness — it's your nervous system telling you it needs a break."
+
+  utter_empathy_angry:
+    - text: "Anger usually means something important to you was crossed or ignored. That deserves to be acknowledged."
+    - text: "Your anger makes sense. It sounds like something really frustrated or hurt you."
+
+  utter_empathy_happy:
+    - text: "That's wonderful to hear! 😊 What's been making things feel good?"
+    - text: "I love hearing that! Hold onto that feeling 🌟"
+
+  utter_empathy_neutral:
+    - text: "Thanks for checking in. Sometimes 'okay' is exactly where we are — and that's fine."
+
+  utter_empathy_unknown:
+    - text: "Thanks for sharing that with me. Can you tell me a little more about how you're feeling?"
+
+  # ── Coping suggestions ───────────────────────────────────────
+  utter_offer_coping_menu:
+    - text: |
+        Here are a few things that might help right now. Which sounds most appealing?
+        
+        🌬️ *Breathing exercise* — calm your nervous system in 2 minutes
+        ✍️ *Journaling prompt* — get thoughts out of your head and onto "paper"
+        🔄 *Reframing* — gently challenge a thought that's bothering you
+        
+        Just say which one you'd like, or I can pick one for you!
+
+  utter_breathing_box:
+    - text: |
+        Let's try *Box Breathing* 🌬️
+        
+        Breathe *in* for 4 counts → Hold for 4 → Breathe *out* for 4 → Hold for 4.
+        
+        Try 3–4 rounds. Your body's stress response will begin to ease.
+        _(Tap me when you're done — I'll be here.)_
+
+  utter_breathing_478:
+    - text: |
+        Let's try the *4-7-8 technique* — great for anxiety and overwhelm.
+        
+        Inhale through your nose for *4 seconds*
+        Hold for *7 seconds*
+        Exhale completely through your mouth for *8 seconds*
+        
+        Repeat 3 times. Want to tell me how it felt after?
+
+  utter_journaling_prompt_sad:
+    - text: |
+        ✍️ *Journaling prompt:*
+        
+        _"What am I grieving right now — even if it seems small? What would I say to a friend who felt exactly this way?"_
+        
+        Take your time. There's no wrong answer.
+
+  utter_journaling_prompt_stressed:
+    - text: |
+        ✍️ *Journaling prompt:*
+        
+        _"If I could remove one thing from my plate right now, what would it be? What's actually in my control today — just today?"_
+
+  utter_journaling_prompt_anxious:
+    - text: |
+        ✍️ *Journaling prompt:*
+        
+        _"What's the worst realistic outcome I'm afraid of? And what's one small thing I could do if that actually happened?"_
+
+  utter_journaling_prompt_angry:
+    - text: |
+        ✍️ *Journaling prompt:*
+        
+        _"What boundary was crossed, ignored, or violated? What do I actually need in this situation that I haven't been able to ask for?"_
+
+  utter_journaling_prompt_generic:
+    - text: |
+        ✍️ *Journaling prompt:*
+        
+        _"What's taking up the most space in my head right now? What would I want tomorrow-me to know about today?"_
+
+  utter_reframing:
+    - text: |
+        🔄 *Gentle Reframe:*
+        
+        You mentioned something heavy. Try asking yourself:
+        👉 "Is this thought a *fact*, or is it an interpretation?"
+        👉 "What would I say to someone I love who had this exact thought?"
+        👉 "Is there a version of this situation where it's not permanent?"
+        
+        You don't have to force positivity — just a tiny bit of wiggle room in the thought.
+
+  utter_reframing_overwhelmed:
+    - text: |
+        🔄 *Reframe for overwhelm:*
+        
+        Your brain is treating everything as equally urgent — but that's rarely true.
+        
+        Ask yourself: *"What is the ONE thing, if done today, that would make tomorrow slightly easier?"*
+        
+        Just one. The rest can wait.
+
+  # ── Crisis response ──────────────────────────────────────────
+  utter_crisis_response:
+    - text: |
+        💙 I want you to know that I hear you, and what you're feeling matters deeply.
+        
+        I'm a chatbot and I'm not equipped to provide the support this moment calls for — but real help is available right now:
+        
+        🇺🇸 *988 Suicide & Crisis Lifeline:* Call or text *988*
+        💬 *Crisis Text Line:* Text HOME to *741741*
+        🌍 *International:* https://www.findahelpline.com
+        
+        Please reach out to one of these — or someone you trust. You deserve real, human support right now. 💙
+
+  # ── Identity / help ─────────────────────────────────────────
+  utter_bot_identity:
+    - text: |
+        I'm *MoodBot* 🤖 — I'm not a therapist or a crisis counselor, just a space to feel heard.
+        
+        I can help you:
+        • Vent without judgment
+        • Try a quick breathing exercise
+        • Work through a journaling prompt
+        • Gently challenge a difficult thought
+        
+        I'll always point you to real professionals if things feel serious.
+
+  utter_help_menu:
+    - text: |
+        Here's what I can do:
+        
+        😔 *Share how you're feeling* — just tell me what's going on
+        🌬️ Say *"breathing exercise"* for a calming technique
+        ✍️ Say *"journaling prompt"* for a reflective question
+        🔄 Say *"help me reframe"* to challenge a difficult thought
+        ℹ️ Say *"what are you?"* to learn about me
+
+  utter_thank_you_response:
+    - text: "I'm really glad this helped even a little 💙"
+    - text: "Of course. You reached out — that took courage. I hope things feel a bit lighter."
+
+  utter_ask_more:
+    - text: "Is there anything else on your mind, or would a coping tool be helpful right now?"
+
+  utter_default_fallback:
+    - text: "I'm not quite sure I understood that. Could you tell me more about how you're feeling, or ask for a specific tool like breathing or journaling?"
+
+  utter_confirm_heard:
+    - text: "Got it. I'm here, and I'm listening."
+
+actions:
+  - action_detect_emotion
+  - action_respond_with_empathy
+  - action_offer_contextual_coping
+  - action_handle_crisis
+  - action_provide_journaling_prompt
+  - validate_mood_form
+
+forms:
+  mood_form:
+    required_slots:
+      - detected_emotion
+
+session_config:
+  session_expiration_time: 60   # minutes
+  carry_over_slots_to_new_session: false

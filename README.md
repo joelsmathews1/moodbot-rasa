@@ -1,2 +1,2 @@
 # moodbot-rasa
-Internship Project.
+Internship Project
